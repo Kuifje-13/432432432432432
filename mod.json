@@ -1,0 +1,60 @@
+{
+	"geode": "5.11.2",
+	"gd": {
+		"win": "2.2081"
+	},
+	"version": "v2.1.0",
+	"id": "user.inputbuffer",
+	"name": "Input Buffer",
+	"developer": "you",
+	"description": "Configurable early-press and delayed-release input buffer (in physics ticks).",
+	"settings": {
+		"enabled": {
+			"type": "bool",
+			"name": "Enabled",
+			"default": true
+		},
+		"start-preset": {
+			"type": "int",
+			"name": "Starting preset",
+			"description": "0 Custom, 1 = 2/2, 2 = 4/4, 3 = 8/8, 4 = 16/8, 5 = Off. Press F6 in a level to cycle.",
+			"default": 0,
+			"min": 0,
+			"max": 5
+		},
+		"press-ticks": {
+			"type": "int",
+			"name": "Press buffer (ticks)",
+			"description": "Custom preset: while you hold the button in the air (cube/ball/robot/spider), the press is re-sent for this many ticks so a ring/pad reached slightly late still triggers. 0 = off.",
+			"default": 2,
+			"min": 0,
+			"max": 16,
+			"control": {
+				"slider": true,
+				"input": true
+			}
+		},
+		"wave-release-ticks": {
+			"type": "int",
+			"name": "Wave release delay (ticks)",
+			"description": "Custom preset: delays releasing the button while in wave. Adds input lag, keep small. 0 = off.",
+			"default": 0,
+			"min": 0,
+			"max": 8,
+			"control": {
+				"slider": true,
+				"input": true
+			}
+		},
+		"player2": {
+			"type": "bool",
+			"name": "Also buffer Player 2",
+			"default": true
+		},
+		"log": {
+			"type": "bool",
+			"name": "Log buffered inputs",
+			"default": false
+		}
+	}
+}
