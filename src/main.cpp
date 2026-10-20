@@ -64,6 +64,11 @@ namespace {
     // Re-sending a press is only harmless where a press does nothing on its own
     // (it only matters for rings/pads). In ship/wave a press is a hold, and in
     // ufo/swing a press always acts, so replaying there would misbehave.
+    bool inPlay(GJBaseGameLayer* layer) {
+        PlayLayer* pl = PlayLayer::get();
+        return pl && static_cast<GJBaseGameLayer*>(pl) == layer;
+    }
+
     bool replaySafe(PlayerObject* p) {
         if (!p) return false;
         if (p->m_isShip || p->m_isDart || p->m_isBird || p->m_isSwing) return false;
@@ -72,8 +77,8 @@ namespace {
 }
 
 class $modify(BufGameLayer, GJBaseGameLayer) {
-    void processCommands(float dt) {
-        if (PlayLayer::get() == this) {
+    void processCommands(float dt, bool isHalfTick, bool isLastTick) {
+        if (inPlay(this)) {
 #ifdef GEODE_IS_WINDOWS
             // F6 cycles presets (polled, so no keyboard-dispatcher signature dependency)
             bool f6 = GetActiveWindow() && (GetAsyncKeyState(VK_F6) & 0x8000);
@@ -113,11 +118,11 @@ class $modify(BufGameLayer, GJBaseGameLayer) {
                 }
             }
         }
-        GJBaseGameLayer::processCommands(dt);
+        GJBaseGameLayer::processCommands(dt, isHalfTick, isLastTick);
     }
 
     void handleButton(bool down, int button, bool isPlayer1) {
-        bool bypass = g_replaying || button != JUMP_BTN || PlayLayer::get() != this || !on();
+        bool bypass = g_replaying || button != JUMP_BTN || !inPlay(this) || !on();
         int i = isPlayer1 ? 0 : 1;
         if (bypass || (i == 1 && !useP2())) {
             // keep held-state accurate even when buffering is off, so toggling mid-level is safe
